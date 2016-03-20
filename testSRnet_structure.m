@@ -1,0 +1,10 @@
+clear;
+im = imread('img1.ppm');
+im = imresize(im,0.25);
+im = single(im);
+[w,h,~] = size(im);
+input = imresize(im,[w+2,h+2]);
+label = im;
+net = SRnet_simple();
+net.conserveMemory = false;
+net.eval({'input',input,'label',label});
