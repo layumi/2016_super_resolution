@@ -18,7 +18,7 @@ for l = 1:numel(obj.layers)
         h =size(1); w =size(2); in = size(3); out=size(4);
         %sc = sqrt(2/(h*w*out)) ;
         sc = sqrt(3/(h*w*in)) ;
-        params{1,1} = (rand(h, w, in, out, 'single')*2 - 1)*sc ;
+        params{1,1} = (rand(h, w, in, out, 'single')*2 - 1)*sc;
         params{1,2} = zeros(out, 1, 'single') ;
     elseif(isequal(class(obj.layers(l).block),'dagnn.ConvTranspose'))
         size=obj.layers(l).block.size;
@@ -41,10 +41,12 @@ for l = 1:numel(obj.layers)
     end
     [obj.params(p).value] = deal(params{:}) ;
     if(isequal(class(obj.layers(l).block),'dagnn.Conv'))
-        [obj.params(p(1)).learningRate]=1;
+        [obj.params(p(1)).learningRate]=.1;
         [obj.params(p(2)).learningRate]=2;
+        [obj.params(p(1)).trainMethod] = 'rmsprop';
+        [obj.params(p(2)).trainMethod] = 'rmsprop';
         if(~isempty(strfind(obj.layers(l+1).name,'loss')))
-            [obj.params(p(1)).learningRate]= 0.1;
+            [obj.params(p(1)).learningRate]= 0.01;
             [obj.params(p(2)).learningRate]= 0.2;
         end
     end
