@@ -10,9 +10,9 @@ This code get the better performance than 'bicubic' for enlarging a 2x pic. It c
 
 original pic -> super resolution pic (trained by matconvnet)
 
-![](https://github.com/layumi/2016_super_resolution/blob/master/2_small.JPEG) ========= ![](https://github.com/layumi/2016_super_resolution/blob/master/2_product.jpg)
+![](https://github.com/layumi/2016_super_resolution/blob/master/demo.jpg) 
 
-# Improvmet
+# Improvement
 1.I add rmsprop to matconvnet(You can learn more from /matlab/cnn_daga.m)
 
 2.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
