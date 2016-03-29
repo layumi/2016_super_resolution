@@ -21,7 +21,7 @@ original pic -> super resolution pic (trained by matconvnet)
 
 For more compile information, you can learn it from www.vlfeat.org/matconvnet/install/#compiling
 
-2.run demo.m for test result.
+2.run testSRnet_result.m for test result.
 
 3.If you want to train it by yourself, you may download my data and use prepare_ur_data.m to produce imdb.mat which include every picture path.
 
