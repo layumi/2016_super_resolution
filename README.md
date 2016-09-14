@@ -3,9 +3,10 @@ ICCV2015 Image Super-Resolution Using Deep Convolutional Networks
 I include train and test code in master branch.
 
 # Training data
-I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from https://pan.baidu.com/s/1c0TvFyw  (Baidu is so annoying. Baidu seems to force Windows user to install their software.
-You may try to download it on a Mac or Ubuntu? I can download it without installation on Mac.)
+I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from https://pan.baidu.com/s/1c0TvFyw  
 ![](https://github.com/layumi/2016_super_resolution/blob/master/WechatIMG1.jpeg)
+(Baidu Driver is so annoying. Baidu seems to force Windows users to install their software.
+You may try to download it on a Mac or Ubuntu? I can download it without installation on Mac. Or install their free software and uninstall after download.lol)
 
 # Result
 This code get the better performance than 'bicubic' for enlarging a 2x pic. It can be trained and tested now. 
