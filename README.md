@@ -32,9 +32,9 @@ For more compile information, you can learn it from www.vlfeat.org/matconvnet/in
 
 4.Use `train_SRnet.m` to have fun~
 
-### I also provide a verson for gray-scale images. But the improvement is limited. You can learn more from `train_SRnet_gray.m` and `testSRnet_gray.m`
+(I also provide a verson for gray-scale images. But the improvement is limited. You can learn more from `train_SRnet_gray.m` and `testSRnet_gray.m`)
  
 # Small Tricks
 1.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
 
-2.How to initial net? (You can learn more from `/matlab/+dagnn/@DagNN/initParam.m`) In this work, the initial weight is important
+2.How to initial net? (You can learn more from `/matlab/+dagnn/@DagNN/initParam.m`) In this work, the initial weight is important! 
