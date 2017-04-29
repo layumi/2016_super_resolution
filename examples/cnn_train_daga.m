@@ -20,9 +20,14 @@ opts.val = [] ;
 opts.gpus = [] ;
 opts.prefetch = false ;
 opts.numEpochs = 300 ;
+opts.down = 9999;
 opts.learningRate = 0.001 ;
 opts.weightDecay = 0.0005 ;
+opts.constraint = 100; %for rmsprop gradient clip
 opts.momentum = 0.9 ;
+opts.gamma = 0.99;
+opts.beta1 = 0.9;
+opts.beta2 = 0.99;
 opts.memoryMapFile = fullfile(tempdir, 'matconvnet.bin') ;
 opts.profile = false ;
 
@@ -80,7 +85,7 @@ for epoch=start+1:opts.numEpochs
 
   % train one epoch
   state.epoch = epoch ;
-  state.learningRate = opts.learningRate(min(epoch, numel(opts.learningRate))) ;
+  state.learningRate = opts.learningRate(min(epoch, numel(opts.learningRate))) * (0.8 ^max(0,epoch-opts.down));
   state.train = opts.train(randperm(numel(opts.train))) ; % shuffle
   state.val = opts.val ;
   state.imdb = imdb ;
@@ -143,6 +148,7 @@ function stats = process_epoch(net, state, opts, mode)
 
 if strcmp(mode,'train')
   state.momentum = num2cell(zeros(1, numel(net.params))) ;
+  state.r = num2cell(zeros(1, numel(net.params))) ;
 end
 
 numGpus = numel(opts.gpus) ;
@@ -150,6 +156,7 @@ if numGpus >= 1
   net.move('gpu') ;
   if strcmp(mode,'train')
     state.momentum = cellfun(@gpuArray,state.momentum,'UniformOutput',false) ;
+    state.r = cellfun(@gpuArray,state.r,'UniformOutput',false) ;
   end
 end
 if numGpus > 1
@@ -199,7 +206,7 @@ for t=1:opts.batchSize:numel(subset)
   end
 
   % extract learning stats
-  stats = opts.extractStatsFn(net) ;
+  stats = opts.extractStatsFn(net) ; %return objective
 
   % accumulate gradient
   if strcmp(mode, 'train')
@@ -263,7 +270,32 @@ for p=1:numel(net.params)
         - thisDecay * net.params(p).value ...
         - (1 / batchSize) * net.params(p).der ;
       net.params(p).value = net.params(p).value + thisLR * state.momentum{p} ;
-
+    
+    case 'rmsprop'
+      thisDecay = opts.weightDecay * net.params(p).weightDecay ;
+      thisLR = state.learningRate * net.params(p).learningRate ;
+      state.r{p} = (1 - opts.gamma) * (net.params(p).der).^2 + opts.gamma * state.r{p};
+      der_constraint = net.params(p).der;
+      der_constraint(der_constraint>opts.constraint) = opts.constraint;
+      der_constraint(der_constraint<-opts.constraint) = -opts.constraint;
+      state.momentum{p} = opts.momentum * state.momentum{p} ...
+        - thisDecay * net.params(p).value ...
+        - (1 / batchSize) * der_constraint ./ (sqrt(state.r{p})+1e-8);  %der is gradient
+      net.params(p).value = net.params(p).value + thisLR * state.momentum{p} ;
+    
+     case 'adam'
+      thisDecay = opts.weightDecay * net.params(p).weightDecay ;
+      beta1 = opts.beta1;
+      beta2 = opts.beta2;
+      thisLR = state.learningRate * net.params(p).learningRate * sqrt(1-beta2^2)/(1-beta1^epoch);
+      state.m{p} = (1 - beta1) .* net.params(p).der + beta1 * state.m{p};
+      state.v{p} = (1 - beta2) .* (net.params(p).der.^2) + beta2 * state.v{p};
+      tmp = state.m{p}/(sqrt(state.v{p}) + 1e-8);
+      state.momentum{p} = opts.momentum * state.momentum{p} ...
+        - thisDecay * net.params(p).value ...
+        - (1 / batchSize) * net.params(p).der *tmp ;
+      net.params(p).value = net.params(p).value + thisLR * state.momentum{p} ;
+      
     case 'otherwise'
       error('Unknown training method ''%s'' for parameter ''%s''.', ...
         net.params(p).trainMethod, ...

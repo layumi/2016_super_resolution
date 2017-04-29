@@ -1,12 +1,14 @@
 # 2016_super_resolution
 ICCV2015 Image Super-Resolution Using Deep Convolutional Networks
-I include train and test code in master branch.
+I re-implement this paper and includes my train and test code in this repository.
+
+# Note that:
+Thanks for @star4. I fix some bugs in the training code and make the code more clear to use.
 
 # Training data
-I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from https://pan.baidu.com/s/1c0TvFyw  
-![](https://github.com/layumi/2016_super_resolution/blob/master/WechatIMG1.jpeg)
-(Baidu Driver is so annoying. Baidu seems to force Windows users to install their software.
-You may try to download it on a Mac or Ubuntu? I can download it without installation on Mac. Or install their free software and uninstall after download.lol)
+I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from [GoogleDriver](https://drive.google.com/open?id=0B0VOCNYh8HeRZmk3SHdrdlcxbXc)
+or [BaiduYun](https://pan.baidu.com/s/1c0TvFyw)
+
 
 # Result
 This code get the better performance than 'bicubic' for enlarging a 2x pic. It can be trained and tested now. 
@@ -30,9 +32,7 @@ For more compile information, you can learn it from www.vlfeat.org/matconvnet/in
 
 4.Use `train_SRnet.m` to have fun~
  
-# Improvement
-1.I add rmsprop to matconvnet(You can learn more from `/matlab/cnn_daga.m`)
+# Small Tricks
+1.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
 
-2.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
-
-3.How to initial net? (You can learn more from `/matlab/+dagnn/@DagNN/initParam.m`) In this work, the initial weight is important
+2.How to initial net? (You can learn more from `/matlab/+dagnn/@DagNN/initParam.m`) In this work, the initial weight is important

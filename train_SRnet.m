@@ -1,4 +1,4 @@
-function train_SRnet(varargin)
+function train_SRnet_gray(varargin)
 addpath('../MATLAB');
 % -------------------------------------------------------------------------
 % Part 4.1: prepare the data
@@ -26,13 +26,13 @@ net.conserveMemory = true;
 
 opts.train.batchSize = 128;
 %opts.train.numSubBatches = 1 ;
-opts.train.continue = true; 
-opts.train.gpus = 2;
+opts.train.continue = false; 
+opts.train.gpus = 3;
 opts.train.prefetch = false ;
 %opts.train.sync = false ;
 %opts.train.errorFunction = 'multiclass' ;
-opts.train.expDir = '/home/zzd/super-resolution/data/SRnet-v1-ycbcr-128' ; 
-opts.train.learningRate = [1e-5*ones(1,3) 1e-6*ones(1,1)];
+opts.train.expDir = './data/SRnet-128-test' ; 
+opts.train.learningRate = [1e-5*ones(1,10) 1e-6*ones(1,5)];
 opts.train.weightDecay = 0.0005;
 opts.train.numEpochs = numel(opts.train.learningRate) ;
 opts.train.derOutputs = {'objective',1} ;
@@ -55,20 +55,26 @@ imlist = imdb.images.data(:,batch) ;
 batch_size = numel(batch);
 img = zeros(128,128,3,batch_size,'single');
 training = opts.learningRate>0;
+% get img from the imdb
 for i=1:batch_size
     p1 = imlist{i};
     im_1 = imread(p1);
     %im_1 = rgb2ycbcr(im_1);
-    %im_1 = rgb2gray(im_1);
+    %im_1 = rgb2gray(im_1);  %if you want to train gray img or ycbcr image.
     im_1 = im2single(im_1);
     im_1 = single(random_cut128(im_1));
     img(:,:,:,i) = im_1;
 end
-if(rand>0.5)
+if(rand>0.5) %mirror img
     img = fliplr(img);
 end
-label = img(7:end-6,7:end-6,:,:);
+% You may refer to the paper
+% The network are loss the 6 pixel in the img boundray because the Conv function.
+% So the network learn to render the center part of the image. 
+% You also can try resize the img to [w-6,h-6] as the label. I think it is
+% also Okay.
+label = img(7:end-6,7:end-6,:,:);  
 [w,h,~,~] = size(img);
-r = 2 + 2*rand;
+r = 2; %2 + 2*rand;   % I found fix r=2 is better.
 input = imresize(imresize(img,1/r),[w,h]);
 inputs = {'input',gpuArray(input),'label',gpuArray(label)};

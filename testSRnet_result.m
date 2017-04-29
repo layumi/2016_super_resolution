@@ -1,10 +1,9 @@
 clear;
 %--------resize
 img = imread('3.jpg');
-img = imresize(img,[668,1000]);% resize for divide 2
-img = im2single(img);
-[w,h,~] = size(img);
-input = imresize(img,1/2);% compress
+img = im2single(img);  %original img as groundtruth file
+[w,h,~] = size(img);  
+input = imresize(img,1/2);  % compress the img as input
 [w_s,h_s,~] = size(input);
 %--------bicubic
 tic;
@@ -17,7 +16,11 @@ fprintf('bicubic_loss:%f\n',mean(reshape(sum(loss_bi,3),1,[])));
 figure(2);
 imshow(result_bi);
 %--------srcnn
-netstruct = load('./data/SRnet-v1-color-128-rmsprop/net-epoch-15.mat');
+
+%netstruct = load('./data/SRnet-128-test/net-epoch-15.mat');   %use your model
+
+netstruct = load('./data/SRnet-color-128/net-epoch-15.mat'); %use layumi's model
+
 net = dagnn.DagNN.loadobj(netstruct.net);
 net.mode = 'test' ;
 net.conserveMemory = false;
@@ -30,6 +33,6 @@ index = net.getVarIndex('prediction');
 result_srcnn = gather(net.vars(index).value);
 loss_srcnn = bsxfun(@minus,truth,result_srcnn).^2;
 fprintf('bicubic_loss:%f\n',mean(reshape(sum(loss_srcnn,3),1,[])));
-imwrite(result_srcnn,'2_product.jpg');
+imwrite(result_srcnn,'product.jpg');
 figure(3);
 imshow(result_srcnn);

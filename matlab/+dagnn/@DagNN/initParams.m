@@ -43,8 +43,8 @@ for l = 1:numel(obj.layers)
     if(isequal(class(obj.layers(l).block),'dagnn.Conv'))
         [obj.params(p(1)).learningRate]=.1;
         [obj.params(p(2)).learningRate]=2;
-        [obj.params(p(1)).trainMethod] = 'rmsprop';
-        [obj.params(p(2)).trainMethod] = 'rmsprop';
+        %[obj.params(p(1)).trainMethod] = 'rmsprop';
+        %[obj.params(p(2)).trainMethod] = 'rmsprop';
         if(~isempty(strfind(obj.layers(l+1).name,'loss')))
             [obj.params(p(1)).learningRate]= 0.01;
             [obj.params(p(2)).learningRate]= 0.2;
