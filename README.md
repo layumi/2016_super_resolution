@@ -1,9 +1,9 @@
 # 2016_super_resolution
 ICCV2015 Image Super-Resolution Using Deep Convolutional Networks
-I re-implement this paper and includes my train and test code in this repository.
+I re-implement this paper and includes my train and test code in this repository. This code uses MIT License.
 
-# Note that:
-Thanks for @star4. I fix some bugs in the training code and make the code more clear to use.
+### Note that:
+Thanks for @star4s. I fixed some bugs in the network training code and made the code more clear to use. (2017/4/29)
 
 # Training data
 I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from [GoogleDriver](https://drive.google.com/open?id=0B0VOCNYh8HeRZmk3SHdrdlcxbXc)
@@ -31,6 +31,8 @@ For more compile information, you can learn it from www.vlfeat.org/matconvnet/in
 3.If you want to train it by yourself, you may download my data and use `prepare_ur_data.m` to produce `imdb.mat` which include every picture path.
 
 4.Use `train_SRnet.m` to have fun~
+
+### I also provide a verson for gray-scale images. But the improvement is limited. You can learn more from `train_SRnet_gray.m` and `testSRnet_gray.m`
  
 # Small Tricks
 1.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
