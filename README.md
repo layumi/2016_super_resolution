@@ -39,3 +39,12 @@ For more compile information, you can learn it from www.vlfeat.org/matconvnet/in
 1.I fix the scale factor 2(than 2+2*rand). It seems to be easy for net to learn more information.
 
 2.How to initial net? (You can learn more from `/matlab/+dagnn/@DagNN/initParam.m`) In this work, the initial weight is important! 
+
+# Citation
+We greatly appreciate it if you can cite the website in your publications:
+```
+@misc{2016_super_resolution,
+  title = {{2016_super_resolution}},
+  howpublished = "\url{https://github.com/layumi/2016_super_resolution}",
+}
+```
