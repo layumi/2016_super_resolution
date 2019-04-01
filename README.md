@@ -7,7 +7,7 @@ I re-implement this paper and includes my train and test code in this repository
 Thanks for @star4s. I fixed some bugs in the network training code and made the code more clear to use. (2017/4/29)
 
 # Training data
-I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from [GoogleDriver](https://drive.google.com/open?id=0B0VOCNYh8HeRZmk3SHdrdlcxbXc)
+I random selected about 60,000 pic from 2014 ILSVR2014_train (only academic) You can download from (Sorry. My Google Driver is out of storage. So I remove it. )
 or [BaiduYun](https://pan.baidu.com/s/1c0TvFyw)
 
 
